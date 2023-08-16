@@ -16,6 +16,20 @@ class _WebViewState extends State<WebViewScreen> {
   var urlController = TextEditingController();
   var initialUrl = 'https://www.youtube.com/';
   var query = 'watch?v=';
+  var isloading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    refreshController = PullToRefreshController(
+        onRefresh: () {
+          webViewController?.reload();
+        },
+        options: PullToRefreshOptions(
+          color: Colors.green,
+          backgroundColor: Colors.white,
+        ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,11 +63,36 @@ class _WebViewState extends State<WebViewScreen> {
       body: Column(
         children: [
           Expanded(
-              child: InAppWebView(
-            onWebViewCreated: (controller) => webViewController = controller,
-            initialUrlRequest: URLRequest(url: url),
-          ))
-          //   SearchBar(),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                InAppWebView(
+                  onLoadStart: (controller, url) {
+                    var v = url.toString();
+                    setState(() {
+                      isloading = true;
+                      urlController.text = v;
+                    });
+                  },
+                  onLoadStop: (controller, url) {
+                    refreshController?.endRefreshing();
+                    setState(() {
+                      isloading = false;
+                    });
+                  },
+                  pullToRefreshController: refreshController,
+                  onWebViewCreated: (controller) =>
+                      webViewController = controller,
+                  initialUrlRequest: URLRequest(url: url),
+                ),
+                Visibility(
+                    visible: isloading,
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(Colors.green),
+                    ))
+              ],
+            ),
+          )
         ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
