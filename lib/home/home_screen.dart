@@ -1,5 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import '../search_bar.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import '../webview/webview_screen.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -12,31 +13,27 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  var urlController = TextEditingController();
+  InAppWebViewController? webViewController;
+  late var url;
+  var initialUrl = 'https://www.youtube.com/';
+  var query = 'watch?v=';
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  void _searchBarInfo() {
+    Navigator.pushReplacementNamed(context, 'webview',
+        arguments: {"text": urlController.value.text});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text(widget.title),
-      // ),
       appBar: AppBar(
-        leading: Container(),
         title: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Text(
-                  'Youtube CV',
-                  textAlign: TextAlign.justify,
-                ),
                 SizedBox(
                   width: 100,
                   height: 100,
@@ -54,22 +51,34 @@ class _MyHomePageState extends State<MyHomePage> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          SearchBar(),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (ctx) => WebView(
-                title: 'Vídeo',
-              ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
             ),
-          );
-        },
-        tooltip: 'Increment',
-        child: const Icon(Icons.arrow_forward_rounded),
+            child: TextField(
+              controller: urlController,
+              textAlignVertical: TextAlignVertical.center,
+              decoration: const InputDecoration(
+                hintText: 'Search by Video ID',
+                prefixIcon: Icon(Icons.search),
+              ), // InputDecoration ), // TextField
+            ),
+            // SearchBar(
+            // ),
+          ),
+          TextButton(
+            onPressed: () => _searchBarInfo(),
+            child: Text(
+              'Submit',
+              style: TextStyle(color: Colors.white),
+            ),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color?>(Colors.grey),
+            ),
+          ),
+        ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }

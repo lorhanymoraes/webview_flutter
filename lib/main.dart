@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:webview_youtube/webview/webview_screen.dart';
 import 'home/home_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -16,7 +18,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.grey,
       ),
-      home: const MyHomePage(title: 'Youtube CV'),
+      initialRoute: 'home',
+      routes: {
+        'home': (context) => MyHomePage(title: 'Vídeo'),
+        'webview': (context) => WebViewScreen()
+      },
+      // home: const MyHomePage(title: 'Youtube CV'),
     );
   }
 }

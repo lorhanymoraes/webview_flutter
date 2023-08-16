@@ -1,66 +1,99 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
-class WebView extends StatefulWidget {
-  const WebView({super.key, required this.title});
-
-  final String title;
+class WebViewScreen extends StatefulWidget {
+  const WebViewScreen({super.key});
 
   @override
-  State<WebView> createState() => _WebViewState();
+  State<WebViewScreen> createState() => _WebViewState();
 }
 
-class _WebViewState extends State<WebView> {
-  int _counter = 0;
+class _WebViewState extends State<WebViewScreen> {
+  InAppWebViewController? webViewController;
+  PullToRefreshController? refreshController;
+  late var url;
+  double progress = 0;
+  var urlController = TextEditingController();
+  var initialUrl = 'https://www.youtube.com/';
+  var query = 'watch?v=';
+  var isloading = false;
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  @override
+  void initState() {
+    super.initState();
+    refreshController = PullToRefreshController(
+        onRefresh: () {
+          webViewController?.reload();
+        },
+        options: PullToRefreshOptions(
+          color: Colors.green,
+          backgroundColor: Colors.white,
+        ));
   }
 
   @override
   Widget build(BuildContext context) {
+    Map? dataHome = ModalRoute.of(context)?.settings.arguments as Map?;
+    String data = dataHome?['text'];
+    url = Uri.parse('$initialUrl$query$data');
+    print(url);
+
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text(widget.title),
-      // ),
       appBar: AppBar(
-        leading: Container(),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pushReplacementNamed(context, 'home');
+            ;
+          },
+          icon: const Icon(Icons.arrow_back_rounded),
+        ),
         title: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Vídeo',
-                  textAlign: TextAlign.justify,
-                ),
-                SizedBox(
-                  width: 100,
-                  height: 100,
-                  child: Image.asset(
-                    'assets/logo_cv.png',
-                    fit: BoxFit.scaleDown,
-                  ),
-                ),
-              ],
+            SizedBox(
+              width: 100,
+              height: 100,
+              child: Image.asset(
+                'assets/logo_cv.png',
+                fit: BoxFit.scaleDown,
+              ),
             ),
           ],
         ),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        // children: <Widget>[
-        //   SearchBar(),
-        // ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        tooltip: 'Increment',
-        child: const Icon(Icons.arrow_back_rounded),
+        children: [
+          Expanded(
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                InAppWebView(
+                  onLoadStart: (controller, url) {
+                    var v = url.toString();
+                    setState(() {
+                      isloading = true;
+                      urlController.text = v;
+                    });
+                  },
+                  onLoadStop: (controller, url) {
+                    refreshController?.endRefreshing();
+                    setState(() {
+                      isloading = false;
+                    });
+                  },
+                  pullToRefreshController: refreshController,
+                  onWebViewCreated: (controller) =>
+                      webViewController = controller,
+                  initialUrlRequest: URLRequest(url: url),
+                ),
+                Visibility(
+                    visible: isloading,
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(Colors.green),
+                    ))
+              ],
+            ),
+          )
+        ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
