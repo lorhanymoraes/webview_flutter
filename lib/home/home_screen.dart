@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import '../search_bar.dart';
 import '../webview/webview_screen.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -30,16 +29,12 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Container(),
         title: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Text(
-                  'Youtube CV',
-                  textAlign: TextAlign.justify,
-                ),
                 SizedBox(
                   width: 100,
                   height: 100,
@@ -67,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
               controller: urlController,
               textAlignVertical: TextAlignVertical.center,
               decoration: const InputDecoration(
-                hintText: "Search",
+                hintText: 'Search by Video ID',
                 prefixIcon: Icon(Icons.search),
               ), // InputDecoration ), // TextField
             ),
