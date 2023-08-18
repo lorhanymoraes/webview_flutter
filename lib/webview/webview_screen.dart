@@ -11,9 +11,7 @@ class WebViewScreen extends StatefulWidget {
 class _WebViewState extends State<WebViewScreen> {
   InAppWebViewController? webViewController;
   PullToRefreshController? refreshController;
-  late var url;
-  double progress = 0;
-  var urlController = TextEditingController();
+
   var initialUrl = 'https://www.youtube.com/';
   var query = 'watch?v=';
   var isloading = false;
@@ -33,10 +31,11 @@ class _WebViewState extends State<WebViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Map? dataHome = ModalRoute.of(context)?.settings.arguments as Map?;
-    String data = dataHome?['text'];
-    url = Uri.parse('$initialUrl$query$data');
-    print(url);
+    dynamic dataHome = ModalRoute.of(context)?.settings.arguments;
+
+    Uri url = dataHome["text"] == ""
+        ? Uri.parse(initialUrl)
+        : Uri.parse('$initialUrl$query${dataHome["text"]}');
 
     return Scaffold(
       appBar: AppBar(
@@ -66,23 +65,21 @@ class _WebViewState extends State<WebViewScreen> {
               alignment: Alignment.center,
               children: [
                 InAppWebView(
-                  onLoadStart: (controller, url) {
-                    var v = url.toString();
-                    setState(() {
-                      isloading = true;
-                      urlController.text = v;
-                    });
-                  },
-                  onLoadStop: (controller, url) {
-                    refreshController?.endRefreshing();
-                    setState(() {
-                      isloading = false;
-                    });
-                  },
-                  pullToRefreshController: refreshController,
                   onWebViewCreated: (controller) =>
                       webViewController = controller,
                   initialUrlRequest: URLRequest(url: url),
+                  pullToRefreshController: refreshController,
+                  onLoadStart: (controller, url) {
+                    var v = url.toString();
+                    debugPrint("onLoadStart callback - youtube url: $v");
+                    isloading = true;
+                    setState(() {});
+                  },
+                  onLoadStop: (controller, url) {
+                    refreshController?.endRefreshing();
+                    isloading = false;
+                    setState(() {});
+                  },
                 ),
                 Visibility(
                     visible: isloading,

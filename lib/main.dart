@@ -10,20 +10,23 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Youtube CV',
       theme: ThemeData(
         primarySwatch: Colors.grey,
       ),
       initialRoute: 'home',
       routes: {
+<<<<<<< HEAD
         'home': (context) => const MyHomePage(title: 'Vídeo'),
+=======
+        'home': (context) => const MyHomePage(),
+>>>>>>> refs/remotes/origin/develop
         'webview': (context) => const WebViewScreen()
       },
-      // home: const MyHomePage(title: 'Youtube CV'),
     );
   }
 }

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+=======
+>>>>>>> refs/remotes/origin/develop
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -12,9 +13,12 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   var urlController = TextEditingController();
+<<<<<<< HEAD
   InAppWebViewController? webViewController;
   var initialUrl = 'https://www.youtube.com/';
   var query = 'watch?v=';
+=======
+>>>>>>> refs/remotes/origin/develop
 
   void _searchBarInfo() {
     Navigator.pushReplacementNamed(context, 'webview',
@@ -62,13 +66,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 prefixIcon: Icon(Icons.search),
               ), // InputDecoration ), // TextField
             ),
-            // SearchBar(
-            // ),
           ),
           TextButton(
             onPressed: () => _searchBarInfo(),
+<<<<<<< HEAD
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color?>(Colors.grey),
+=======
+            style: TextButton.styleFrom(
+              backgroundColor: Colors.grey,
+>>>>>>> refs/remotes/origin/develop
             ),
             child: const Text(
               'Submit',
