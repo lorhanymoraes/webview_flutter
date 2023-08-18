@@ -20,8 +20,8 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: 'home',
       routes: {
-        'home': (context) => MyHomePage(title: 'Vídeo'),
-        'webview': (context) => WebViewScreen()
+        'home': (context) => const MyHomePage(title: 'Vídeo'),
+        'webview': (context) => const WebViewScreen()
       },
       // home: const MyHomePage(title: 'Youtube CV'),
     );

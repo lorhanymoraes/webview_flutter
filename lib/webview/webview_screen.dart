@@ -43,7 +43,6 @@ class _WebViewState extends State<WebViewScreen> {
         leading: IconButton(
           onPressed: () {
             Navigator.pushReplacementNamed(context, 'home');
-            ;
           },
           icon: const Icon(Icons.arrow_back_rounded),
         ),
@@ -87,7 +86,7 @@ class _WebViewState extends State<WebViewScreen> {
                 ),
                 Visibility(
                     visible: isloading,
-                    child: CircularProgressIndicator(
+                    child: const CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation(Colors.green),
                     ))
               ],

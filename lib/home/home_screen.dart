@@ -1,7 +1,5 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import '../webview/webview_screen.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -15,7 +13,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   var urlController = TextEditingController();
   InAppWebViewController? webViewController;
-  late var url;
   var initialUrl = 'https://www.youtube.com/';
   var query = 'watch?v=';
 
@@ -70,12 +67,12 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           TextButton(
             onPressed: () => _searchBarInfo(),
-            child: Text(
-              'Submit',
-              style: TextStyle(color: Colors.white),
-            ),
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color?>(Colors.grey),
+            ),
+            child: const Text(
+              'Submit',
+              style: TextStyle(color: Colors.white),
             ),
           ),
         ],
